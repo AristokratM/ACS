@@ -14,3 +14,33 @@
 * Комп'ютерна пам'ять (англ. primary storage) — масив комірок з унікальними ідентифікаторами (адресами), в яких зберігаються команди та дані.
 * Пристрої вводу/виводу, які забезпечують зв'язок ЕОМ з зовнішнім світом, передають інформацію на переробку в ЕОМ та приймають результати.
 
+
+## 4. Напишіть прапори команди tasm для асемблювання вихідного коду. Які можливості вони надають.
+`tasm.exe /l /zi /x hello.asm`
+ - Прапор **/l** створює у робочому каталозі файл лістингу hello.lst, що містить адреси,
+машинні коди, текст, коментарі. Це інформація для налагодження
+- Прапор **/x** створює файл карти пам’яті. Наприклад при виконанні команди: `tlink /x
+hello.obj` створюєтся файл карти пам’яті hello.map (Linked Address Map)
+- Прапор **/zi** додає до файлу hello.obj коментарі, назви змінних, тощо. Це
+необхідно для спрощення процесу налагодження.
+
+## 5. Опишіть технологію компонування (лінкування), які процеси відбуваються і які файли утворюються. Напишіть команду для компонування (лінкування).
+- *Компоновка програми* У випадках, коли текст програми знаходиться у декількох файлах і спільно використовуються змінні, описані у цих файлах, обов'язково потрібно включити етап компоновки. Процес об'єднання об'єктних модулів в один файл здійснюється спеціальною програмою-компоновником (наприклад програма Tlink). Результатом компоновки є виконавчі файли, що мають розширення *.com, *.exe.
+-  An object file is a binary representation of your program. The assembler gives a memory location to each variable and instruction; we will see later that these memory locations are actually represented symbolically or via offsets. It also make a lists of all the unresolved references that presumably will be defined in other object file or libraries, e.g. printf. A typical object file contains the program text (instructions) and data (constants and strings), information about instructions and data that depend on absolute addresses, a symbol table of unresolved references, and possibly some debugging information. The UNIX command nm allows you to look at the symbols (both defined and unresolved) in an object file.
+- Since an object file will be linked with other object files and libraries to produce a program, the assembler cannot assign absolute memory locations to all the instructions and data in a file. Rather, it writes some notes in the object file about how it assumed things were layed out. It is the job of the linker to use these notes to assign absolute memory locations to everything and resolve any unresolved references. Again, both cc and gcc on the instructional machines use the native linker, ld. Some compilers chose to have their own linkers, so that optimizations can be performed at link time; one such optimization is that of aligning procedures on page boundaries. The linker produces a binary executable that can be run from the command interface. 
+
+- При виконанні `tlink.exe /v hello.obj.` утворюється файл hello.exe
+Прапор **/v** додає до файлу hello.exe інформацію для спрощення процесу
+налагодження (коментарі, назви змінних, тощо) Interpreter: translate and execute
+programs directly
+
+- Результат роботи закінчення визначення адресних посилань і поєднання при необхідності декількох *.obj для створення програми, що виконується
+
+
+## 6. Опишіть технологію налагодження для асемблера tasm, які процеси відбуваються. Напишіть команду для запуску налагодження tasm.
+- *Налагодження програми* Будь-яка програма потребує налагодження (виправлення помилок). Сучасні налагоджувальні програми (наприклад програми Debug, TurboDebugger) дозволяють у процесі виконання програми контролювати значення регістрів загального призначення чи змінних, змінювати їх. Можна переглядати вміст різних ділянок пам'яті. Можна виконувати програму по крокам.
+`td my_prog.exe`
+- Результат роботи – можливість прогону програми по крокам, перегляд змісту пам'яті, регістрів, регістру прапорів
+
+### полезная картинка
+![tasm processes](http://www.itdom.info/Tehnol/8.files/image008.gif)
